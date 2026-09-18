@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: termometro-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/termometro
+    username: termometro
+    password: termometro
+  jpa:
+    hibernate:
+      ddl-auto: validate      # nunca 'update'. O Flyway manda no schema.
+    open-in-view: false       # desliga já, evita lazy loading escondido no controller
+    properties:
+      hibernate.format_sql: true
+  flyway:
+    enabled: true
+
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+
+management:
+  endpoints.web.exposure.include: health,info
+
+logging:
+  level:
+    org.springframework.security: DEBUG   # tirar depois que o login funcionar
