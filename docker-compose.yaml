@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - termometro-lasm
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U termometro -d termometro"]
       interval: 5s
@@ -26,8 +28,13 @@ services:
       SPRING_DATASOURCE_PASSWORD: termometro
     ports:
       - "8080:8080"
+    networks:
+      - termometro-lasm
     depends_on:
       db:
         condition: service_healthy
 volumes:
   pgdata:
+networks:
+  termometro-lasm:
+    external: true
