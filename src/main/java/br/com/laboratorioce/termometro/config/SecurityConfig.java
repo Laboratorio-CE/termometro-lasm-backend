@@ -19,11 +19,10 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.GET, "/api/hello").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/conteudos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/checkins").permitAll()
-                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "EDITOR")
                         .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/api/admin/**").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginProcessingUrl("/api/auth/login"))
                 .logout(out -> out.logoutUrl("/api/auth/logout"))
