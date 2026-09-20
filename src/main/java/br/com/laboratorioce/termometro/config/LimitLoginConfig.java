@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class LimitLoginConfig extends OncePerRequestFilter {
 
     private static final int LIMITE = 5;
+    private final int JANELA_EM_SEGUNDOS = 5 * 60; // 5 minutinho de castigo
 
     private Instant inicioDaJanela = Instant.now();
     private int tentativas = 0;
@@ -37,7 +38,8 @@ public class LimitLoginConfig extends OncePerRequestFilter {
 
     private synchronized boolean excedeuOLimite() {
         Instant agora = Instant.now();
-        if (inicioDaJanela.plusSeconds(60).isBefore(agora)) {
+        
+        if (inicioDaJanela.plusSeconds(JANELA_EM_SEGUNDOS).isBefore(agora)) {
             inicioDaJanela = agora;
             tentativas = 0;
         }
