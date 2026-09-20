@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
@@ -45,6 +46,7 @@ public class SecurityConfig {
                     })
                     .failureHandler((req, res, exception) -> {
                         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        res.setCharacterEncoding("UTF-8");
                         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
                         res.getWriter().write("{\"mensagem\":\"E-mail ou senha inválidos\"}");
                     }))
@@ -56,7 +58,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                     .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
+                    .addFilterBefore(new LimitLoginConfig(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
