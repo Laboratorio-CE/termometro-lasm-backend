@@ -24,7 +24,3 @@ server:
 
 management:
   endpoints.web.exposure.include: health,info
-
-logging:
-  level:
-    org.springframework.security: DEBUG   # tirar depois que o login funcionar
