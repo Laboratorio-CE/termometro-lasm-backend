@@ -1,5 +1,4 @@
 package br.com.laboratorioce.termometro.shared;
 
-public class ApiError {
-    
+public record ApiError(String mensagem) {
 }
