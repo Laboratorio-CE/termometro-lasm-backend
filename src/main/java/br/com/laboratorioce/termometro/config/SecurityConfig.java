@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/checkins").permitAll()
                         .requestMatchers("/api/auth/eu").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/admin/**").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
@@ -58,6 +59,8 @@ public class SecurityConfig {
                     .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                     .csrf(csrf -> csrf
+                        // check-in é anônimo e sem sessão: o visitante não tem o cookie XSRF-TOKEN
+                        .ignoringRequestMatchers("/api/checkins")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                     .addFilterBefore(new LimitLoginConfig(), UsernamePasswordAuthenticationFilter.class);
