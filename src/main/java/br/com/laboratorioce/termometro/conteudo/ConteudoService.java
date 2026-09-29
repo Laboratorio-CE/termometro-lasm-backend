@@ -4,6 +4,7 @@ import br.com.laboratorioce.termometro.admin.AdminUser;
 import br.com.laboratorioce.termometro.admin.AdminUserRepository;
 import br.com.laboratorioce.termometro.conteudo.dto.ConteudoDetalheDTO;
 import br.com.laboratorioce.termometro.conteudo.dto.ConteudoForm;
+import br.com.laboratorioce.termometro.conteudo.dto.ConteudoPublicoDTO;
 import br.com.laboratorioce.termometro.conteudo.dto.ConteudoResumoDTO;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,17 @@ public class ConteudoService {
     @Transactional(readOnly = true)
     public ConteudoDetalheDTO buscar(Long id) {
         return ConteudoDetalheDTO.from(encontrar(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ConteudoPublicoDTO> listarPublicados(String categoria) {
+        return repository.listarPublicados(categoria).stream().map(ConteudoPublicoDTO::resumo).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ConteudoPublicoDTO buscarPublicado(String slug) {
+        return repository.findBySlugAndStatus(slug, Conteudo.PUBLICADO).map(ConteudoPublicoDTO::completo)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public ConteudoDetalheDTO criar(ConteudoForm form, String email) {

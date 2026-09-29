@@ -30,6 +30,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/conteudos/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/paginas/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/checkins").permitAll()
                         .requestMatchers("/api/auth/eu").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
